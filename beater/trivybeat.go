@@ -56,14 +56,14 @@ func (bt *trivybeat) Run(b *beat.Beat) error {
 		return err
 	}
 
-    // Create a Docker client
-    ctx := context.Background()
-    cli, err := DockerClient.NewClient("unix:///var/run/docker.sock", "v1.41", nil, nil)
+	// Create a Docker client
+	ctx := context.Background()
+	cli, err := DockerClient.NewClient("unix:///var/run/docker.sock", "v1.41", nil, nil)
 	if err != nil {
 		panic(err)
 	}
 
-    ticker := time.NewTicker(bt.config.Period)
+	ticker := time.NewTicker(bt.config.Period)
 	for {
 		select {
 		case <-bt.done:
@@ -71,31 +71,31 @@ func (bt *trivybeat) Run(b *beat.Beat) error {
 		case <-ticker.C:
 		}
 
-    	containers, err := cli.ContainerList(ctx, DockerTypes.ContainerListOptions{})
-    	if err != nil {
-    		panic(err)
-    	}
+		containers, err := cli.ContainerList(ctx, DockerTypes.ContainerListOptions{})
+		if err != nil {
+			panic(err)
+		}
 
-    	for _, container := range containers {
-    		logp.Info(container.Image)
-    		results := TrivyScan( string(container.Image), bt.config.Server )
-    		for _, vulnerability := range results[0].Vulnerabilities {
-    		    logp.Info("%+v\n", vulnerability.VulnerabilityID)
-        	    event := beat.Event{
-        			Timestamp: time.Now(),
-        			Fields: common.MapStr{
-        				"type":    b.Info.Name,
-                        "container.image.name": string(container.Image),
-                        "vulnerability.id": vulnerability.VulnerabilityID,
-                        "vulnerability.severity": vulnerability.Vulnerability.Severity,
-                        "vulnerability.description": vulnerability.Vulnerability.Description,
-                        "vulnerability.reference": vulnerability.Vulnerability.References,
-                        "vulnerability.pkgname": vulnerability.PkgName,
-                    },
-        		}
-        		bt.client.Publish(event)
-        	}
-       	}
+		for _, container := range containers {
+			logp.Info(container.Image)
+			results := TrivyScan( string(container.Image), bt.config.Server )
+			for _, vulnerability := range results[0].Vulnerabilities {
+				logp.Info("%+v\n", vulnerability.VulnerabilityID)
+				event := beat.Event{
+					Timestamp: time.Now(),
+					Fields: common.MapStr{
+						"type":    b.Info.Name,
+						"container.image.name": string(container.Image),
+						"vulnerability.id": vulnerability.VulnerabilityID,
+						"vulnerability.severity": vulnerability.Vulnerability.Severity,
+						"vulnerability.description": vulnerability.Vulnerability.Description,
+						"vulnerability.reference": vulnerability.Vulnerability.References,
+						"vulnerability.pkgname": vulnerability.PkgName,
+					},
+				}
+				bt.client.Publish(event)
+			}
+		}
 	}
 }
 
@@ -136,7 +136,7 @@ func TrivyScan(imageFlag string, url string) report.Results {
 		log.Logger.Infof("no vulnerabilities found for image %s", imageFlag)
 	}
 
-    return results
+	return results
 }
 
 // Initialize Docker Scanner
