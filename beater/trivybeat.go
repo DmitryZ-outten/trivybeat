@@ -91,10 +91,10 @@ func (bt *trivybeat) Run(b *beat.Beat) error {
                         "vulnerability.description": vulnerability.Vulnerability.Description,
                         "vulnerability.reference": vulnerability.Vulnerability.References,
                         "vulnerability.pkgname": vulnerability.PkgName,
-        			},
+                    },
         		}
         		bt.client.Publish(event)
-    		}
+        	}
        	}
 	}
 }
