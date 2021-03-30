@@ -2,8 +2,15 @@
   title: trivybeat
   description:
   fields:
-    - name: counter
-      type: long
-      required: true
-      description: >
-        PLEASE UPDATE DOCUMENTATION
+    - name: container.image.name
+      type: text
+    - name: vulnerability.id
+      type: text
+    - name: vulnerability.severity
+      type: text
+    - name: vulnerability.description
+      type: text
+    - name: vulnerability.reference
+      type: text
+    - name: vulnerability.pkgname
+      type: text

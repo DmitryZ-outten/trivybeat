@@ -22,7 +22,11 @@ replace (
 
 require (
 	github.com/akavel/rsrc v0.10.2 // indirect
+	github.com/aquasecurity/fanal v0.0.0-20210119051230-28c249da7cfd
+	github.com/aquasecurity/trivy v0.16.0
+	github.com/aquasecurity/trivy-db v0.0.0-20210105160501-c5bf4e153277
 	github.com/dlclark/regexp2 v1.4.0 // indirect
+	github.com/docker/engine-api v0.4.0
 	github.com/dop251/goja v0.0.0-20210322220816-6fc852574a34 // indirect
 	github.com/dop251/goja_nodejs v0.0.0-20210225215109-d91c329300e7 // indirect
 	github.com/elastic/beats/v7 v7.0.0-alpha2.0.20210324124808-e2002891592e
@@ -48,6 +52,7 @@ require (
 	golang.org/x/net v0.0.0-20210324051636-2c4c8ecb7826 // indirect
 	golang.org/x/sys v0.0.0-20210324051608-47abb6519492 // indirect
 	golang.org/x/tools v0.1.0
+	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1
 	google.golang.org/genproto v0.0.0-20210323160006-e668133fea6a // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	honnef.co/go/tools v0.1.3 // indirect
