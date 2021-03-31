@@ -73,27 +73,32 @@ func (bt *trivybeat) Run(b *beat.Beat) error {
 
 		containers, err := cli.ContainerList(ctx, DockerTypes.ContainerListOptions{})
 		if err != nil {
-			panic(err)
+			logp.Info("could not get running containers: %v", err)
 		}
 
 		for _, container := range containers {
 			logp.Info(container.Image)
 			results := TrivyScan( string(container.Image), bt.config.Server )
-			for _, vulnerability := range results[0].Vulnerabilities {
-				logp.Info("%+v\n", vulnerability.VulnerabilityID)
-				event := beat.Event{
-					Timestamp: time.Now(),
-					Fields: common.MapStr{
-						"type":    b.Info.Name,
-						"container.image.name": string(container.Image),
-						"vulnerability.id": vulnerability.VulnerabilityID,
-						"vulnerability.severity": vulnerability.Vulnerability.Severity,
-						"vulnerability.description": vulnerability.Vulnerability.Description,
-						"vulnerability.reference": vulnerability.Vulnerability.References,
-						"vulnerability.pkgname": vulnerability.PkgName,
-					},
+			if len(results) > 0 {
+				logp.Info("%d vulnerability/ies found", len(results[0].Vulnerabilities))
+				for _, vulnerability := range results[0].Vulnerabilities {
+					logp.Info("%+v\n", vulnerability.VulnerabilityID)
+					event := beat.Event{
+						Timestamp: time.Now(),
+						Fields: common.MapStr{
+							"type":    b.Info.Name,
+							"container.image.name": string(container.Image),
+							"vulnerability.id": vulnerability.VulnerabilityID,
+							"vulnerability.severity": vulnerability.Vulnerability.Severity,
+							"vulnerability.description": vulnerability.Vulnerability.Description,
+							"vulnerability.reference": vulnerability.Vulnerability.References,
+							"vulnerability.pkgname": vulnerability.PkgName,
+						},
+					}
+					bt.client.Publish(event)
 				}
-				bt.client.Publish(event)
+			} else {
+				logp.Info("no vulnerabilities found for image %s", container.Image)
 			}
 		}
 	}
@@ -126,15 +131,6 @@ func TrivyScan(imageFlag string, url string) report.Results {
 		ScanRemovedPackages: true,
 		ListAllPackages:     true,
 	})
-	if err != nil {
-		log.Logger.Fatalf("could not scan image: %v", err)
-	}
-
-	if len(results) > 0 {
-		log.Logger.Infof("%d vulnerability/ies found", len(results[0].Vulnerabilities))
-	} else {
-		log.Logger.Infof("no vulnerabilities found for image %s", imageFlag)
-	}
 
 	return results
 }
