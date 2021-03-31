@@ -9241,15 +9241,45 @@ alias to: process.executable
 None
 
 
-*`counter`*::
+*`container.image.name`*::
 +
 --
-PLEASE UPDATE DOCUMENTATION
+type: text
 
+--
 
-type: long
+*`vulnerability.id`*::
++
+--
+type: text
 
-required: True
+--
+
+*`vulnerability.severity`*::
++
+--
+type: text
+
+--
+
+*`vulnerability.description`*::
++
+--
+type: text
+
+--
+
+*`vulnerability.reference`*::
++
+--
+type: text
+
+--
+
+*`vulnerability.pkgname`*::
++
+--
+type: text
 
 --
 
