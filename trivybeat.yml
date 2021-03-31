@@ -1,6 +1,6 @@
-################### {Beat} Configuration Example #########################
+################### Trivybeat Configuration Example #########################
 
-############################# {Beat} ######################################
+############################# Trivybeat ######################################
 
 trivybeat:
   # Defines how often an event is sent to the output
