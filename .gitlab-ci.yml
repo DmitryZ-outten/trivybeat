@@ -1,0 +1,18 @@
+image: golang:1.15.2
+
+stages:
+  - build
+
+build:
+  stage: build
+  script:
+    - git clone https://github.com/magefile/mage
+    - ls -l ./
+    - cd mage
+    - go run bootstrap.go
+    - cd -
+    - mage build
+  artifacts:
+    paths:
+      - "trivybeat"
+
