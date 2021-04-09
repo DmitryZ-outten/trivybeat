@@ -1,4 +1,4 @@
-FROM centos:7
+FROM centos:8
 
 RUN mkdir /apps
 COPY ./trivybeat /apps/trivybeat
