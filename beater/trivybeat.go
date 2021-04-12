@@ -127,7 +127,7 @@ func TrivyScan(imageFlag string, url string) report.Results {
 	defer cleanUp()
 
 	results, err := sc.ScanArtifact(ctx, types.ScanOptions{
-		VulnType:            []string{"os", "library"},
+		VulnType:            []string{"os"},
 		ScanRemovedPackages: true,
 		ListAllPackages:     true,
 	})
