@@ -79,6 +79,7 @@ func (bt *trivybeat) Run(b *beat.Beat) error {
 		for _, container := range containers {
 			logp.Info(container.Image)
 			results := TrivyScan( string(container.Image), bt.config.Server )
+			fmt.Printf("%+v\n", results)
 			if len(results) > 0 {
 				logp.Info("%d vulnerability/ies found", len(results[0].Vulnerabilities))
 				for _, vulnerability := range results[0].Vulnerabilities {
