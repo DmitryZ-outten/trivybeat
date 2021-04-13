@@ -7,4 +7,4 @@ COPY ./trivybeat /apps/trivybeat
 
 WORKDIR /config
 ENTRYPOINT /apps/trivybeat
-CMD [ "-e" ]
+CMD ["-environment" "container"]
