@@ -2,7 +2,7 @@ FROM centos:8
 
 LABEL maitainer="Dmitriy Zadorozhnyi" 
 
-RUN mkdir /apps /config
+RUN mkdir /apps
 COPY ./trivybeat /apps/trivybeat
 
 WORKDIR /config
