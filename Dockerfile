@@ -1,6 +1,6 @@
 FROM centos:8
 
-LABEL maitainer="Dmitriy Zadorozhnyi" 
+LABEL maitainer="Dmitry Zadorozhnyi" 
 
 RUN mkdir /apps
 COPY ./trivybeat /apps/trivybeat
