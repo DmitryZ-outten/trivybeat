@@ -56,13 +56,6 @@ func (bt *trivybeat) Run(b *beat.Beat) error {
 		return err
 	}
 
-	// Create a Docker client
-	ctx := context.Background()
-	cli, err := DockerClient.NewClient("unix:///var/run/docker.sock", "v1.41", nil, nil)
-	if err != nil {
-		panic(err)
-	}
-
 	ticker := time.NewTicker(bt.config.Period)
 	for {
 		select {
@@ -71,19 +64,13 @@ func (bt *trivybeat) Run(b *beat.Beat) error {
 		case <-ticker.C:
 		}
 
-		containers, err := cli.ContainerList(ctx, DockerTypes.ContainerListOptions{})
-		if err != nil {
-			logp.Info("could not get running containers: %v", err)
-		}
-
+		containers := GetContainers( )
 		for _, container := range containers {
 			logp.Info(container.Image)
 			results := TrivyScan( string(container.Image), bt.config.Server )
-			fmt.Printf("%+v\n", results)
 			if len(results) > 0 {
 				logp.Info("%d vulnerability/ies found", len(results[0].Vulnerabilities))
 				for _, vulnerability := range results[0].Vulnerabilities {
-					logp.Info("%+v\n", vulnerability.VulnerabilityID)
 					event := beat.Event{
 						Timestamp: time.Now(),
 						Fields: common.MapStr{
@@ -103,6 +90,25 @@ func (bt *trivybeat) Run(b *beat.Beat) error {
 			}
 		}
 	}
+}
+
+// Get containers
+func GetContainers() []DockerTypes.Container {
+
+	// Create a Docker client
+	ctx := context.Background()
+	cli, err := DockerClient.NewClient("unix:///var/run/docker.sock", "v1.41", nil, nil)
+	if err != nil {
+		panic(err)
+	}
+
+	// Get running containers
+	containers, err := cli.ContainerList(ctx, DockerTypes.ContainerListOptions{})
+	if err != nil {
+		logp.Info("could not get running containers: %v", err)
+	}
+
+	return containers
 }
 
 // Scan with Trivy
