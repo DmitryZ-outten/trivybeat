@@ -5,6 +5,6 @@ LABEL maitainer="Dmitry Zadorozhnyi"
 RUN mkdir /apps
 COPY ./trivybeat /apps/trivybeat
 
-WORKDIR /config
+WORKDIR /configs
 ENTRYPOINT /apps/trivybeat
 CMD ["-environment" "container"]
