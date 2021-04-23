@@ -65,17 +65,17 @@ func (bt *trivybeat) Run(b *beat.Beat) error {
 		}
 
 		containers := GetContainers( )
-		for _, container := range containers {
-			logp.Info(container.Image)
-			results := TrivyScan( string(container.Image), bt.config.Server )
-			if len(results) > 0 {
-				logp.Info("%d vulnerability/ies found", len(results[0].Vulnerabilities))
-				for _, vulnerability := range results[0].Vulnerabilities {
+		results := TrivyScan( containers, bt.config.Server )
+
+		for _, container := range results {
+			fmt.Printf("\n==================\n")
+			fmt.Printf("%+v\n", container[0].Target)
+			for _, vulnerability := range container[0].Vulnerabilities {
 					event := beat.Event{
 						Timestamp: time.Now(),
 						Fields: common.MapStr{
 							"type":    b.Info.Name,
-							"container.image.name": string(container.Image),
+							"container.image.name": string(container[0].Target),
 							"vulnerability.id": vulnerability.VulnerabilityID,
 							"vulnerability.severity": vulnerability.Vulnerability.Severity,
 							"vulnerability.description": vulnerability.Vulnerability.Description,
@@ -84,11 +84,11 @@ func (bt *trivybeat) Run(b *beat.Beat) error {
 						},
 					}
 					bt.client.Publish(event)
-				}
-			} else {
-				logp.Info("no vulnerabilities found for image %s", container.Image)
 			}
+
 		}
+		fmt.Printf("\n+++++++++++++++++++++\n")
+		
 	}
 }
 
@@ -112,7 +112,7 @@ func GetContainers() []DockerTypes.Container {
 }
 
 // Scan with Trivy
-func TrivyScan(imageFlag string, url string) report.Results {
+func TrivyScan(containers []DockerTypes.Container, url string) []report.Results {
 
 	if err := log.InitLogger(true, false); err != nil {
 		log.Logger.Fatalf("error happened: %v", xerrors.Errorf("failed to initialize a logger: %w", err))
@@ -125,21 +125,30 @@ func TrivyScan(imageFlag string, url string) report.Results {
 	if err != nil {
 		log.Logger.Fatalf("could not initialize f: %v", err)
 	}
+    
+	var vuln []report.Results
+	for _, container := range containers {
+		fmt.Printf("%+v\n", container)
+    	sc, cleanUp, err := initializeDockerScanner(ctx, container.Image, localCache, client.CustomHeaders{}, client.RemoteURL(url), time.Second*5000)
+		if err != nil {
+			log.Logger.Fatalf("could not initialize scanner: %v", err)
+		}
 
-	sc, cleanUp, err := initializeDockerScanner(ctx, imageFlag, localCache, client.CustomHeaders{}, client.RemoteURL(url), time.Second*5000)
-	if err != nil {
-		log.Logger.Fatalf("could not initialize scanner: %v", err)
+		defer cleanUp()
+
+		results, err := sc.ScanArtifact(ctx, types.ScanOptions{
+			VulnType:            []string{"os"},
+			ScanRemovedPackages: true,
+		})
+	    if err != nil {
+	    	fmt.Printf("%+v\n", err)
+	    	//log.Logger.Fatalf("error in image scan: %v", err)
+	    } else {
+			vuln = append(vuln, results)
+		}
 	}
 
-	defer cleanUp()
-
-	results, err := sc.ScanArtifact(ctx, types.ScanOptions{
-		VulnType:            []string{"os"},
-		ScanRemovedPackages: true,
-		ListAllPackages:     true,
-	})
-
-	return results
+	return vuln
 }
 
 // Initialize Docker Scanner
