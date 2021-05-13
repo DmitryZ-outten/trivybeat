@@ -22,15 +22,16 @@ replace (
 
 require (
 	github.com/akavel/rsrc v0.10.2 // indirect
-	github.com/aquasecurity/fanal v0.0.0-20210119051230-28c249da7cfd
-	github.com/aquasecurity/trivy v0.16.0
-	github.com/aquasecurity/trivy-db v0.0.0-20210105160501-c5bf4e153277
+	github.com/aquasecurity/fanal v0.0.0-20210501093021-8aaac3e8dea7
+	github.com/aquasecurity/trivy v0.17.2
+	github.com/aquasecurity/trivy-db v0.0.0-20210429114658-ae22941a55d0
 	github.com/dlclark/regexp2 v1.4.0 // indirect
 	github.com/docker/engine-api v0.4.0
 	github.com/dop251/goja v0.0.0-20210322220816-6fc852574a34 // indirect
 	github.com/dop251/goja_nodejs v0.0.0-20210225215109-d91c329300e7 // indirect
 	github.com/elastic/beats/v7 v7.0.0-alpha2.0.20210324124808-e2002891592e
 	github.com/fatih/color v1.10.0 // indirect
+	github.com/gin-gonic/gin v1.5.0 // indirect
 	github.com/go-sourcemap/sourcemap v2.1.3+incompatible // indirect
 	github.com/gofrs/uuid v4.0.0+incompatible // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect

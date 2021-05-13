@@ -15,13 +15,13 @@ import (
 	DockerTypes "github.com/docker/engine-api/types"
 
 	image2 "github.com/aquasecurity/fanal/artifact/image"
-	"github.com/aquasecurity/fanal/cache"
 	"github.com/aquasecurity/fanal/image"
 	"github.com/aquasecurity/trivy/pkg/log"
 	"github.com/aquasecurity/trivy/pkg/report"
 	"github.com/aquasecurity/trivy/pkg/rpc/client"
 	"github.com/aquasecurity/trivy/pkg/scanner"
 	"github.com/aquasecurity/trivy/pkg/types"
+	"github.com/aquasecurity/trivy/pkg/cache"
 	"golang.org/x/xerrors"
 )
 
@@ -121,15 +121,10 @@ func TrivyScan(containers []DockerTypes.Container, url string) []report.Results 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*1000)
 	defer cancel()
 
-	localCache, err := cache.NewFSCache("")
-	if err != nil {
-		log.Logger.Fatalf("could not initialize f: %v", err)
-	}
-    
 	var vuln []report.Results
 	for _, container := range containers {
 		fmt.Printf("%+v\n", container)
-    	sc, cleanUp, err := initializeDockerScanner(ctx, container.Image, localCache, client.CustomHeaders{}, client.RemoteURL(url), time.Second*5000)
+    	sc, cleanUp, err := initializeDockerScanner(ctx, container.Image, client.CustomHeaders{}, client.RemoteURL(url), time.Second*5000)
 		if err != nil {
 			log.Logger.Fatalf("could not initialize scanner: %v", err)
 		}
@@ -152,7 +147,7 @@ func TrivyScan(containers []DockerTypes.Container, url string) []report.Results 
 }
 
 // Initialize Docker Scanner
-func initializeDockerScanner(ctx context.Context, imageName string, artifactCache cache.ArtifactCache, customHeaders client.CustomHeaders, url client.RemoteURL, timeout time.Duration) (scanner.Scanner, func(), error) {
+func initializeDockerScanner(ctx context.Context, imageName string, customHeaders client.CustomHeaders, url client.RemoteURL, timeout time.Duration) (scanner.Scanner, func(), error) {
 	scannerScanner := client.NewProtobufClient(url)
 	clientScanner := client.NewScanner(customHeaders, scannerScanner)
 	dockerOption, err := types.GetDockerOption(timeout)
@@ -163,7 +158,8 @@ func initializeDockerScanner(ctx context.Context, imageName string, artifactCach
 	if err != nil {
 		return scanner.Scanner{}, nil, err
 	}
-	artifact := image2.NewArtifact(imageImage, artifactCache)
+	artifactCache := cache.NewRemoteCache(cache.RemoteURL(url), nil)
+	artifact := image2.NewArtifact(imageImage, artifactCache, nil)
 	scanner2 := scanner.NewScanner(clientScanner, artifact)
 	return scanner2, func() {
 		cleanup()
