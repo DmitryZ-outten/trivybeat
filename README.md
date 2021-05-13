@@ -1,53 +1,36 @@
 # Trivybeat
 
-Welcome to Trivybeat.
+Welcome to Trivybeat 👋
 
-Ensure that this folder is at the following location:
-`${GOPATH}/src/github.com/DmitryZ-outten/trivybeat`
 
 ## Getting Started with Trivybeat
 
 ### Requirements
 
 * [Golang](https://golang.org/dl/) 1.7
+* [Mage](https://magefile.org/)
 
-### Init Project
-To get running with Trivybeat and also install the
-dependencies, run the following command:
+### Build from source code
 
+Create directory and clone the repo:
 ```
-make setup
-```
-
-It will create a clean git history for each major step. Note that you can always rewrite the history if you wish before pushing your changes.
-
-To push Trivybeat in the git repository, run the following commands:
-
-```
-git remote set-url origin https://github.com/DmitryZ-outten/trivybeat
-git push origin master
+mkdir -p ${GOPATH}/src/github.com/DmitryZ-outten/trivybeat
+git clone https://github.com/DmitryZ-outten/trivybeat ${GOPATH}/src/github.com/DmitryZ-outten/trivybeat
 ```
 
-For further development, check out the [beat developer guide](https://www.elastic.co/guide/en/beats/libbeat/current/new-beat.html).
-
-### Build
-
-To build the binary for Trivybeat run the command below. This will generate a binary
-in the same directory with the name trivybeat.
-
+Build the excutable for your OS:
 ```
-make
+mage build
 ```
-
 
 ### Run
 
-To run Trivybeat with debugging output enabled, run:
+Adjust the `trivybeat.yml` file for your needs. e.g. specify the trivy server and elasticsearch connection
 
+To run Trivybeat with debugging output enabled, run:
 ```
 ./trivybeat -c trivybeat.yml -e -d "*"
 ```
-
 
 ### Test
 
@@ -76,7 +59,6 @@ which is automatically generated based on `fields.yml` by running the following 
 make update
 ```
 
-
 ### Cleanup
 
 To clean  Trivybeat source code, run the following command:
@@ -90,20 +72,6 @@ To clean up the build directory and generated artifacts, run:
 ```
 make clean
 ```
-
-
-### Clone
-
-To clone Trivybeat from the git repository, run the following commands:
-
-```
-mkdir -p ${GOPATH}/src/github.com/DmitryZ-outten/trivybeat
-git clone https://github.com/DmitryZ-outten/trivybeat ${GOPATH}/src/github.com/DmitryZ-outten/trivybeat
-```
-
-
-For further development, check out the [beat developer guide](https://www.elastic.co/guide/en/beats/libbeat/current/new-beat.html).
-
 
 ## Packaging
 
