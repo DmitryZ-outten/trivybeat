@@ -133,7 +133,7 @@ func TrivyScan(containers []DockerTypes.Container, url string) []report.Results 
 
 		results, err := sc.ScanArtifact(ctx, types.ScanOptions{
 			VulnType:            []string{"os"},
-			ScanRemovedPackages: true,
+			ScanRemovedPackages: false,
 		})
 	    if err != nil {
 	    	fmt.Printf("%+v\n", err)
