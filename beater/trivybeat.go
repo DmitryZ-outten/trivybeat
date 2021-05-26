@@ -50,6 +50,13 @@ func New(b *beat.Beat, cfg *common.Config) (beat.Beater, error) {
 func (bt *trivybeat) Run(b *beat.Beat) error {
 	logp.Info("trivybeat is running! Hit CTRL-C to stop it.")
 
+// Define a map for CVE severity
+	severity_id := make(map[string]int)
+	severity_id["CRITICAL"] = 1
+	severity_id["HIGH"] = 2
+	severity_id["MEDIUM"] = 3
+	severity_id["LOW"] = 4
+
 	var err error
 	bt.client, err = b.Publisher.Connect()
 	if err != nil {
@@ -75,12 +82,19 @@ func (bt *trivybeat) Run(b *beat.Beat) error {
 						Timestamp: time.Now(),
 						Fields: common.MapStr{
 							"type":    b.Info.Name,
-							"container.image.name": string(container[0].Target),
-							"vulnerability.id": vulnerability.VulnerabilityID,
-							"vulnerability.severity": vulnerability.Vulnerability.Severity,
-							"vulnerability.description": vulnerability.Vulnerability.Description,
-							"vulnerability.reference": vulnerability.Vulnerability.References,
-							"vulnerability.pkgname": vulnerability.PkgName,
+							"container": common.MapStr{ 
+								"image": common.MapStr{ 
+									"name": string(container[0].Target),
+								},
+							},
+							"vulnerability": common.MapStr{
+								"id": vulnerability.VulnerabilityID,
+								"severity": vulnerability.Vulnerability.Severity,
+								"severity_id": severity_id[vulnerability.Vulnerability.Severity],
+								"description": vulnerability.Vulnerability.Description,
+								"reference": vulnerability.Vulnerability.References,
+								"pkgname": vulnerability.PkgName,
+							},
 						},
 					}
 					bt.client.Publish(event)
