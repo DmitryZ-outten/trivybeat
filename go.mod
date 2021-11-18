@@ -22,25 +22,19 @@ replace (
 
 require (
 	github.com/Shopify/sarama v1.27.0 // indirect
-	github.com/akavel/rsrc v0.10.2 // indirect
 	github.com/aquasecurity/fanal v0.0.0-20210501093021-8aaac3e8dea7
 	github.com/aquasecurity/trivy v0.17.2
-	github.com/aquasecurity/trivy-db v0.0.0-20210429114658-ae22941a55d0
 	github.com/dgrijalva/jwt-go v3.2.1-0.20190620180102-5e25c22bd5d6+incompatible // indirect
 	github.com/dlclark/regexp2 v1.4.0 // indirect
 	github.com/docker/engine-api v0.4.0
 	github.com/dop251/goja v0.0.0-20211022113120-dc8c55024d06 // indirect
 	github.com/dop251/goja_nodejs v0.0.0-20211022123610-8dd9abb0616d // indirect
-	github.com/elastic/beats/v7 v7.15.1
+	github.com/elastic/beats/v7 v7.15.2
 	github.com/elastic/elastic-agent-client/v7 v7.0.0-20210922110810-e6f1f402a9ed // indirect
-	github.com/elastic/go-sysinfo v1.7.1 // indirect
 	github.com/fatih/color v1.13.0 // indirect
-	github.com/gin-gonic/gin v1.7.0 // indirect
 	github.com/go-sourcemap/sourcemap v2.1.3+incompatible // indirect
 	github.com/gofrs/uuid v4.1.0+incompatible // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
-	github.com/hashicorp/go-multierror v1.1.1 // indirect
-	github.com/hashicorp/nomad/api v0.0.0-20201203164818-6318a8ac7bf8 // indirect
 	github.com/jcchavezs/porto v0.4.0 // indirect
 	github.com/josephspurrier/goversioninfo v1.3.0 // indirect
 	github.com/magefile/mage v1.11.0
@@ -48,7 +42,6 @@ require (
 	github.com/mitchellh/gox v1.0.1
 	github.com/mitchellh/hashstructure v1.1.0 // indirect
 	github.com/pierrre/gotestcover v0.0.0-20160517101806-924dca7d15f0
-	github.com/poy/eachers v0.0.0-20181020210610-23942921fe77 // indirect
 	github.com/prometheus/procfs v0.7.3 // indirect
 	github.com/rcrowley/go-metrics v0.0.0-20201227073835-cf1acfcdf475 // indirect
 	github.com/tsg/go-daemon v0.0.0-20200207173439-e704b93fd89b
@@ -67,7 +60,5 @@ require (
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1
 	google.golang.org/genproto v0.0.0-20211101144312-62acf1d99145 // indirect
 	google.golang.org/grpc v1.41.0 // indirect
-	gopkg.in/yaml.v2 v2.4.0 // indirect
-	honnef.co/go/tools v0.1.3 // indirect
 	howett.net/plist v0.0.0-20201203080718-1454fab16a06 // indirect
 )
