@@ -97,6 +97,7 @@ func (bt *trivybeat) Run(b *beat.Beat) error {
 							},
 						},
 					}
+					fmt.Printf("event created\n")
 					bt.client.Publish(event)
 			}
 
