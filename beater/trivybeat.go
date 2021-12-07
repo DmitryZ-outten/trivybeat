@@ -77,9 +77,9 @@ func (bt *trivybeat) Run(b *beat.Beat) error {
 
 		for i, container := range results {
 			fmt.Printf("\n========%v==========\n", i)
-			fmt.Printf("%+v\n", container[0].Target)
+			fmt.Printf("%+v", container)
 			fmt.Printf("\n------------------\n")
-			fmt.Printf("%+v", container[0])
+			fmt.Printf("%+v\n", container[0].Target)
 			fmt.Printf("\n------------------\n")
 			for _, vulnerability := range container[0].Vulnerabilities {
 					event := beat.Event{
