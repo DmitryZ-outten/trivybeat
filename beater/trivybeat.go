@@ -75,8 +75,8 @@ func (bt *trivybeat) Run(b *beat.Beat) error {
 		fmt.Printf("Trivybeat has found: %v containers on the host\n", len(containers))
 		results := TrivyScan( containers, bt.config.Server )
 
-		for _, container := range results {
-			fmt.Printf("\n==================\n")
+		for i, container := range results {
+			fmt.Printf("\n========%v==========\n", i)
 			fmt.Printf("%+v\n", container[0].Target)
 			fmt.Printf("\n------------------\n")
 			fmt.Printf("%+v", container[0])
