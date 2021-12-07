@@ -72,13 +72,14 @@ func (bt *trivybeat) Run(b *beat.Beat) error {
 		}
 
 		containers := GetContainers( )
+		fmt.Printf("Trivybeat has found: %v containers on the host\n", len(containers))
 		results := TrivyScan( containers, bt.config.Server )
 
 		for _, container := range results {
 			fmt.Printf("\n==================\n")
 			fmt.Printf("%+v\n", container[0].Target)
 			fmt.Printf("\n------------------\n")
-			fmt.Printf("%+v\n", container[0])
+			fmt.Printf("%+v", container[0])
 			fmt.Printf("\n------------------\n")
 			for _, vulnerability := range container[0].Vulnerabilities {
 					event := beat.Event{
