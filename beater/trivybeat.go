@@ -78,33 +78,35 @@ func (bt *trivybeat) Run(b *beat.Beat) error {
 		for i, container := range results {
 			fmt.Printf("\n========%v==========\n", i)
 			fmt.Printf("%+v", container)
-			fmt.Printf("\n------------------\n")
-			fmt.Printf("%+v\n", container[0].Target)
-			fmt.Printf("\n------------------\n")
-			for _, vulnerability := range container[0].Vulnerabilities {
-					event := beat.Event{
-						Timestamp: time.Now(),
-						Fields: common.MapStr{
-							"type":    b.Info.Name,
-							"container": common.MapStr{ 
-								"image": common.MapStr{ 
-									"name": string(container[0].Target),
-								},
-							},
-							"vulnerability": common.MapStr{
-								"id": vulnerability.VulnerabilityID,
-								"severity": vulnerability.Vulnerability.Severity,
-								"severity_id": severity_id[vulnerability.Vulnerability.Severity],
-								"description": vulnerability.Vulnerability.Description,
-								"reference": vulnerability.Vulnerability.References,
-								"pkgname": vulnerability.PkgName,
-							},
-						},
-					}
-					fmt.Printf("event created\n")
-					fmt.Printf("%+v\n", event)
-					bt.client.Publish(event)
-			}
+     		if len(container) > 0 {
+     			fmt.Printf("\n------------------\n")
+     			fmt.Printf("%+v\n", container[0].Target)
+     			fmt.Printf("\n------------------\n")
+     			for _, vulnerability := range container[0].Vulnerabilities {
+     					event := beat.Event{
+     						Timestamp: time.Now(),
+     						Fields: common.MapStr{
+     							"type":    b.Info.Name,
+     							"container": common.MapStr{ 
+     								"image": common.MapStr{ 
+     									"name": string(container[0].Target),
+     								},
+     							},
+     							"vulnerability": common.MapStr{
+     								"id": vulnerability.VulnerabilityID,
+     								"severity": vulnerability.Vulnerability.Severity,
+     								"severity_id": severity_id[vulnerability.Vulnerability.Severity],
+     								"description": vulnerability.Vulnerability.Description,
+     								"reference": vulnerability.Vulnerability.References,
+     								"pkgname": vulnerability.PkgName,
+     							},
+     						},
+     					}
+     					fmt.Printf("event created\n")
+     					fmt.Printf("%+v\n", event)
+     					bt.client.Publish(event)
+     			}
+		    }
 
 		}
 		fmt.Printf("\n+++++++++++++++++++++\n")
