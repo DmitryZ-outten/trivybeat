@@ -77,11 +77,8 @@ func (bt *trivybeat) Run(b *beat.Beat) error {
 
 		for i, container := range results {
 			fmt.Printf("\n========%v==========\n", i)
-			fmt.Printf("%+v", container)
      		if len(container) > 0 {
-     			fmt.Printf("\n------------------\n")
-     			fmt.Printf("%+v\n", container[0].Target)
-     			fmt.Printf("\n------------------\n")
+     			fmt.Printf("Creating CVE events for container: %+v\n", container[0].Target)
      			for _, vulnerability := range container[0].Vulnerabilities {
      					event := beat.Event{
      						Timestamp: time.Now(),
@@ -102,15 +99,10 @@ func (bt *trivybeat) Run(b *beat.Beat) error {
      							},
      						},
      					}
-     					fmt.Printf("event created\n")
-     					fmt.Printf("%+v\n", event)
      					bt.client.Publish(event)
      			}
 		    }
-
 		}
-		fmt.Printf("\n+++++++++++++++++++++\n")
-		
 	}
 }
 
@@ -145,7 +137,6 @@ func TrivyScan(containers []DockerTypes.Container, url string) []report.Results 
 
 	var vuln []report.Results
 	for _, container := range containers {
-		fmt.Printf("%+v\n", container)
     	sc, cleanUp, err := initializeDockerScanner(ctx, container.Image, client.CustomHeaders{}, client.RemoteURL(url), time.Second*5000)
 		if err != nil {
 			log.Logger.Fatalf("could not initialize scanner: %v", err)
