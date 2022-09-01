@@ -86,3 +86,4 @@ This will fetch and create all images required for the build process. The whole 
 ## Docker image
 
 https://hub.docker.com/r/dmyz/trivybeat
+
