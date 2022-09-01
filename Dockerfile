@@ -1,4 +1,4 @@
-FROM centos:8
+FROM almalinux:9-minimal
 
 LABEL maitainer="Dmitry Zadorozhnyi" 
 
