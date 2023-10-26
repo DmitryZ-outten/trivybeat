@@ -18,6 +18,8 @@ replace (
 	github.com/kardianos/service => github.com/blakerouse/service v1.1.1-0.20200924160513-057808572ffa
 	github.com/tonistiigi/fifo => github.com/containerd/fifo v0.0.0-20190816180239-bda0ff6ed73c
 	golang.org/x/tools => golang.org/x/tools v0.0.0-20200602230032-c00d67ef29d0 // release 1.14
+	// Address CVE-2021-4238
+	github.com/Masterminds/goutils => github.com/Masterminds/goutils v1.1.1
 )
 
 require (
